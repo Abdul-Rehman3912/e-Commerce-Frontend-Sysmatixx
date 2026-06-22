@@ -1,4 +1,3 @@
-// pages/PhotosDescription.jsx
 import React, { useRef } from "react";
 import Navbar from "../components/navbar.jsx";
 import { useNavigate } from "react-router-dom";
@@ -7,8 +6,6 @@ import { useProductStore } from "../store/useProductStore.js";
 export default function PhotosDescription() {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  
-  // Get state and actions from Zustand store
   const {
     productData,
     errors,
@@ -20,11 +17,9 @@ export default function PhotosDescription() {
     goToPrevScreen
   } = useProductStore();
   
-  // Handle image upload
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
     
-    // Filter only image files
     const imageFiles = files.filter(file => file.type.startsWith('image/'));
     
     if (imageFiles.length === 0) {
@@ -32,39 +27,32 @@ export default function PhotosDescription() {
       return;
     }
     
-    // Check total images limit (max 5)
     const totalImages = productData.images.length + imageFiles.length;
     if (totalImages > 5) {
       alert("You can upload maximum 5 images");
       return;
     }
     
-    // Add images to store
     addImages(imageFiles);
     
-    // Clear file input
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
   
-  // Handle remove image
   const handleRemoveImage = (index) => {
     removeImage(index);
   };
   
-  // Handle description change
   const handleDescriptionChange = (e) => {
     updateDescription(e.target.value);
   };
   
-  // Handle back button
   const handleBack = () => {
     goToPrevScreen();
     navigate(-1);
   };
   
-  // Handle form submission
   const handleSubmit = async () => {
     const result = await createProduct();
     
@@ -88,7 +76,6 @@ export default function PhotosDescription() {
             </p>
           </div>
           
-          {/* Steps */}
           <div className="flex items-center gap-4 mb-6">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 flex items-center justify-center rounded-full bg-green-500 text-white text-sm">
@@ -111,7 +98,6 @@ export default function PhotosDescription() {
             </div>
           </div>
           
-          {/* Card */}
           <div className="border rounded-xl p-4 md:p-6">
             <h2 className="font-medium text-gray-900">Photos & Description</h2>
             <p className="text-sm text-gray-500 mb-4">
@@ -119,13 +105,11 @@ export default function PhotosDescription() {
             </p>
             
             <div className="space-y-5">
-              {/* Image Upload */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Product Images *
                 </label>
                 
-                {/* Display existing images */}
                 {productData.images.length > 0 && (
                   <div className="flex flex-wrap gap-3 mb-3">
                     {productData.images.map((image, index) => (
@@ -147,7 +131,6 @@ export default function PhotosDescription() {
                   </div>
                 )}
                 
-                {/* Upload button */}
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   className={`w-32 h-32 border-2 border-dashed rounded-lg flex flex-col items-center justify-center text-gray-400 text-xs cursor-pointer hover:bg-gray-50 ${
@@ -177,7 +160,6 @@ export default function PhotosDescription() {
                 )}
               </div>
               
-              {/* Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Description *
@@ -199,7 +181,6 @@ export default function PhotosDescription() {
                 </p>
               </div>
               
-              {/* Summary Section (Optional - shows preview of data) */}
               <div className="bg-gray-50 rounded-lg p-3 text-sm">
                 <p className="font-medium text-gray-700 mb-2">Summary:</p>
                 <p><span className="text-gray-500">Title:</span> {productData.title}</p>
@@ -207,7 +188,6 @@ export default function PhotosDescription() {
                 <p><span className="text-gray-500">Category:</span> {productData.category}</p>
               </div>
               
-              {/* Buttons */}
               <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-2">
                 <button
                   onClick={handleBack}
