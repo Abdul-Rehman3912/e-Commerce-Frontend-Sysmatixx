@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EyeOff, Eye, Loader2 } from "lucide-react";
+import { EyeOff, Eye } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore.js";
 import { Link } from "react-router-dom";
@@ -10,7 +10,6 @@ export default function Signup() {
     fullName: "",
     email: "",
     password: "",
-    role: "",
   });
 
   const handleChange = (e) => {
@@ -31,11 +30,13 @@ export default function Signup() {
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const success = validateForm();
-    if (success === true) signup(form);
-    console.log("Signup API:", form);
+    if (success === true) {
+      await signup(form);
+      window.location.href = "/";
+    }
   };
 
   return (
@@ -58,7 +59,7 @@ export default function Signup() {
               type="text"
               name="fullName"
               placeholder="Full Name"
-              value={form.name}
+              value={form.fullName}
               onChange={handleChange}
               className="w-full px-4 py-3 border rounded-lg"
             />
@@ -90,30 +91,11 @@ export default function Signup() {
               </button>
             </div>
 
-             <select
-              name="role"
-              value={form.role}
-              onChange={handleChange}
-              className="w-full px-4 py-3 border rounded-lg"
-            >
-              <option value="" disabled>
-                Select Role
-              </option>
-              <option value="Admin">Admin</option>
-              <option value="User">User</option>
-            </select> 
-
             <button
               className="w-full bg-gray-900 text-white py-3 rounded-lg"
               disabled={isSigningUp}
             >
-              {isSigningUp ? (
-                <>
-                  Loading...
-                </>
-              ) : (
-                "Sign Up"
-              )}
+              {isSigningUp ? <>Loading...</> : "Sign Up"}
             </button>
           </form>
           <div className="text-center mt-5">

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // useNavigate import kiya
+import { useParams, useNavigate } from 'react-router-dom';
 import { axiosInstance } from '../libs/axios.js';
 import Navbar from '../components/navbar.jsx';
 import { useAuthStore } from '../store/useAuthStore.js';
@@ -7,7 +7,7 @@ import { useAuthStore } from '../store/useAuthStore.js';
 const ProductDetail = () => {
   const { id } = useParams();
   const { authUser } = useAuthStore();
-  const navigate = useNavigate(); // Navigation hook initialize kiya
+  const navigate = useNavigate();
   
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,6 @@ const ProductDetail = () => {
   const handleBuyNow = async () => {
     if (!productData) return;
     
-    // 🔴 Khas Check: Agar user authenticated nahi hai to login page par bhejo
     if (!authUser) {
       navigate('/login');
       return;
@@ -64,7 +63,7 @@ const ProductDetail = () => {
           zipCode: '10001',
           country: 'USA'
         },
-        userId: authUser._id // Ab guest_user likhne ki zaroorat nahi kyun ke user lazmi logged in hoga
+        userId: authUser._id
       };
 
       const response = await axiosInstance.post('/payment/create-checkout-session', orderData);

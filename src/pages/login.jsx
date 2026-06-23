@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { EyeOff, Eye, Loader2 } from "lucide-react";
+import { EyeOff, Eye } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore.js";
 import { Link } from "react-router-dom";
@@ -18,22 +18,21 @@ export default function Login() {
   };
 
   const validateForm = () => {
-    if (!form.email.trim()) return error("Email is requitoastred");
+    if (!form.email.trim()) return toast.error("Email is required");
     if (!/\S+@\S+\.\S+/.test(form.email))
       return toast.error("Invalid email format");
     if (!form.password) return toast.error("Password is required");
     return true;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const success = validateForm();
-    if(success === true) login(form);
-    if (!success) return;
-
-    console.log("Login API:", form);
+    if (success === true) {
+      await login(form);
+      window.location.href = document.referrer || "/";
+    }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -82,16 +81,10 @@ export default function Login() {
               className="w-full bg-gray-900 text-white py-3 rounded-lg"
               disabled={isLogingIng}
             >
-              {isLogingIng ? (
-                <>
-                  Loading...
-                </>
-              ) : (
-                "LogIn"
-              )}
+              {isLogingIng ? <>Loading...</> : "LogIn"}
             </button>
           </form>
-                    <div className="text-center mt-5">
+          <div className="text-center mt-5">
             <p className="text-base-content/60">
               Already have'nt an account?{" "}
               <Link to="/signup" className="link link-primary">
