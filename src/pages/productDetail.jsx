@@ -54,7 +54,7 @@ const ProductDetail = () => {
           title: productData.title,
           price: productData.price,
           quantity: quantity,
-          image: productData.images?.[0]?.url || 'https://via.placeholder.com/400'
+          image: productData.images?.[activeImage]?.url || 'https://via.placeholder.com/400'
         }],
         shippingAddress: {
           street: '123 Main St',
@@ -104,40 +104,75 @@ const ProductDetail = () => {
       <Navbar />
       <div className="min-h-screen mt-14 bg-gray-50 py-8">
         <div className="max-w-4xl mx-auto px-4 bg-white p-8 rounded-2xl shadow-md grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <img 
-              src={productData.images?.[activeImage]?.url || "https://via.placeholder.com/400"} 
-              alt={productData.title} 
-              className="w-full h-80 object-cover rounded-xl"
-            />
-          </div>
+          
+          {/* LEFT SIDE - Product Images with Thumbnail Slider */}
           <div className="space-y-4">
-            <h1 className="text-2xl font-bold">{productData.title}</h1>
-            <p className="text-gray-600">{productData.description}</p>
-            <h2 className="text-3xl font-extrabold">${price}</h2>
+            {/* Main Image */}
+            <div className="bg-white rounded-xl shadow overflow-hidden border border-gray-100">
+              <img 
+                src={productData.images?.[activeImage]?.url || "https://via.placeholder.com/400"} 
+                alt={productData.title} 
+                className="w-full h-80 object-cover"
+              />
+            </div>
             
-            <div className="flex items-center gap-3">
+            {/* Thumbnails Row */}
+            {productData.images && productData.images.length > 1 && (
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
+                {productData.images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveImage(index)}
+                    className={`flex-shrink-0 rounded-lg overflow-hidden border-2 transition ${
+                      activeImage === index 
+                        ? "border-black shadow-md" 
+                        : "border-gray-200 hover:border-gray-400"
+                    }`}
+                  >
+                    <img
+                      src={img.url}
+                      alt={`thumb-${index}`}
+                      className="w-16 h-16 object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* RIGHT SIDE - Product Specifications */}
+          <div className="space-y-4">
+            <h1 className="text-2xl font-bold text-gray-900">{productData.title}</h1>
+            <p className="text-gray-600 text-sm leading-relaxed">{productData.description}</p>
+            <h2 className="text-3xl font-extrabold text-gray-900">${price}</h2>
+            
+            <div className="flex items-center gap-3 pt-2">
               <button 
                 onClick={() => setQuantity(Math.max(1, quantity - 1))} 
-                className="px-3 py-1 bg-gray-200 rounded"
-              >-</button>
-              <span>{quantity}</span>
+                className="px-3 py-1 bg-gray-100 font-bold rounded hover:bg-gray-200 transition"
+              >
+                -
+              </button>
+              <span className="font-semibold w-6 text-center">{quantity}</span>
               <button 
                 onClick={() => setQuantity(quantity + 1)} 
-                className="px-3 py-1 bg-gray-200 rounded"
-              >+</button>
+                className="px-3 py-1 bg-gray-100 font-bold rounded hover:bg-gray-200 transition"
+              >
+                +
+              </button>
             </div>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
 
             <button
               onClick={handleBuyNow}
               disabled={paymentLoading}
-              className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition disabled:opacity-50"
+              className="w-full bg-black text-white py-3 rounded-xl font-semibold hover:bg-gray-800 transition disabled:opacity-50 mt-4 shadow-sm"
             >
               {paymentLoading ? "Redirecting to Stripe..." : `Buy Now - $${(price * quantity).toFixed(2)}`}
             </button>
           </div>
+
         </div>
       </div>
     </div>
