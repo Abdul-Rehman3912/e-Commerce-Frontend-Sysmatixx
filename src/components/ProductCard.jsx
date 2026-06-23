@@ -20,9 +20,7 @@ const ProductCard = ({ product }) => {
       <p className="text-gray-500 text-xs mt-1">Current Price</p>
       <p className="font-bold text-lg">${product.price}</p>
 
-      <div className="text-xs text-gray-400 mt-1">
-        {product.totalBids} bids • {product.endTime}
-      </div>
+
     </div>
   );
 };
