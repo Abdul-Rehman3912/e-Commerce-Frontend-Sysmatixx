@@ -31,10 +31,8 @@ function App() {
     <div className="min-h-screen bg-white flex justify-center">
       <div className="w-full min-h-screen bg-gray-100 shadow-2xl border">
         <Routes>
-          {/* Ab home page sab ke liye khula hai, koi restriction nahi */}
           <Route path="/" element={<Products />} />
           
-          {/* Agar user already logged in hai to login/signup pages par na jaa sakay */}
           <Route
             path="/signup"
             element={!authUser ? <SignUp /> : <Navigate to="/" />}
